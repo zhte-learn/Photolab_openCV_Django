@@ -1,0 +1,25 @@
+{% load static %}
+<header>
+  <nav class="navbar navbar-light" style="background-color: lightskyblue">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'photo_lab:index' %}">
+        {% comment %} <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt=""> {% endcomment %}
+        OpenCV Project
+      </a>
+      {% with request.resolver_match.view_name as view_name %}        
+        <ul class="nav  nav-pills">
+          <li class="nav-item">              
+            <a class="nav-link {% if view_name == 'photo_lab:index' %} active {% endif %}" href="{% url 'photo_lab:index' %}">
+              Photo Lab
+            </a>
+          </li>
+          <li class="nav-item">              
+            <a class="nav-link {% if view_name == 'video_lab:index' %} active {% endif %}" href="{% url 'video_lab:index' %}">
+              Video Lab
+            </a>
+          </li>
+        </ul>
+      {% endwith %}      
+    </div>
+  </nav> 
+</header>

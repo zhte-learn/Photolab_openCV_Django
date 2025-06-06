@@ -1,0 +1,21 @@
+<div class="card" style="width: 40rem;">
+  <div class="card-body">
+    {% if photo.image %}
+        <a href="{{ photo.image.url }}" target="_blank">
+          <img 
+            class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" 
+            src="{{ photo.image.url }}"
+            style="width: 100%; height: 450px; object-fit: cover;"
+          >
+        </a>
+      {% endif %}
+    <h5 class="card-title">{{ photo.title }}</h5>
+    
+    <a href="{% url 'photo_lab:detect_faces' photo.id %}" class="btn btn-primary mt-2">
+      Face detection
+    </a>
+    <a href="{% url 'photo_lab:annotate_objects' photo.id %}" class="btn btn-primary mt-2">
+      Objects annotation
+    </a>
+  </div>
+</div>

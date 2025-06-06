@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}
+  Photo Lab
+{% endblock %}
+{% block content %}
+  <h1 class="mb-5">Photo Lab</h1>
+    {% for photo in photo_list %}
+      <article class="mb-5">
+        {% include "includes/media_card.html" %}
+      </article>
+    {% endfor %}
+{% endblock %}

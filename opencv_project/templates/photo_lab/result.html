@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Face Detection{% endblock %}
+
+{% block content %}
+  <h2>Result of: {{ title }}</h2>
+
+  {% comment %} <h4>Original image:</h4>
+  <a href="{{ original }}" target="_blank">
+    <img 
+      src="{{ original }}" 
+      class="img-fluid mb-4"
+      style="width: 100%; height: 450px; object-fit: cover;"
+    >
+  </a> {% endcomment %}
+
+  <h4>After OpenCV:</h4>
+  <a href="{{ processed }}" target="_blank">
+    <img 
+      src="{{ processed }}" 
+      class="img-fluid"
+      style="width: 100%; height: 450px; object-fit: cover;"
+    >
+  </a>
+
+  <a href="{% url 'photo_lab:index' %}" class="btn btn-secondary mt-3">← Back</a>
+{% endblock %}
