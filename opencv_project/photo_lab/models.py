@@ -3,6 +3,7 @@ from django.db import models
 class Photo(models.Model):
     title = models.CharField("Title", max_length=30)
     image = models.ImageField("Photo", upload_to="photo_images", blank=True)
+    annotation = models.CharField("Annotation", max_length=30, blank=True, null=True)
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Uploaded"

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Sharpened Image{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2 class="mb-4">Original vs. Sharpened Image</h2>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5>Original Image</h5>
+      <a href="{{ original_photo.image.url }}" target="_blank">
+        <img 
+          src="{{ original_photo.image.url }}" 
+          class="img-fluid border"
+          alt="Original Image"
+        >
+      </a>
+    </div>
+
+    <div class="col-md-6">
+      <h5>Sharpened Image</h5>
+      <a href="{{ sharpened_image_url }}" target="_blank">
+        <img 
+          src="{{ sharpened_image_url }}" 
+          class="img-fluid border"
+          alt="Sharpened Image"
+        >
+      </a>
+    </div>
+  </div>
+
+  <a href="{% url 'photo_lab:index' %}" class="btn btn-secondary mt-4">← Back</a>
+</div>
+{% endblock %}

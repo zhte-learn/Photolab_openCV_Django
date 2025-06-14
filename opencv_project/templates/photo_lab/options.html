@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Choose option for — {{ photo.title }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="mb-4">What do you want to do with the image?</h1>
+
+  <div class="card shadow-sm" style="max-width: 720px">
+    <div class="card-body" style="padding: 20px;">
+      <form method="post" action="{% url 'photo_lab:process_photo' photo.id %}">
+        {% csrf_token %}
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" value="detect_faces" id="detect_faces" name="operations">
+          <label class="form-check-label" for="detect_faces">
+            Face Detection
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" value="detect_daytime" id="detect_daytime" name="operations">
+          <label class="form-check-label" for="detect_daytime">
+            Daytime Detection
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" value="reduce_noise" id="reduce_noise" name="operations">
+          <label class="form-check-label" for="reduce_noise">
+            Reduce noise
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" value="reduce_blur" id="reduce_blur" name="operations">
+          <label class="form-check-label" for="reduce_blur">
+            Reduce blur
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" value="assess_quality" id="assess_quality" name="operations">
+          <label class="form-check-label" for="assess_quality">
+            Quality Assessment
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Confirm</button>
+      </form>
+    </div>
+
+    <img src="{{ photo.image.url }}" class="card-img-top img-fluid" alt="{{ photo.title }}" style="width: 100%; height: auto; margin-top: 15px;">
+  </div>
+
+  <a href="{% url 'photo_lab:index' %}" class="btn btn-primary mt-3">&larr; Upload next image</a>
+</div>
+{% endblock %}

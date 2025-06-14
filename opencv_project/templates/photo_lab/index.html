@@ -4,9 +4,16 @@
 {% endblock %}
 {% block content %}
   <h1 class="mb-5">Photo Lab</h1>
-    {% for photo in photo_list %}
-      <article class="mb-5">
-        {% include "includes/media_card.html" %}
-      </article>
-    {% endfor %}
+    <p class="mb-4">
+      <strong>How to use:</strong> First, upload an image using the form below. After that, choose the task you want to perform.
+    </p>
+
+    <form method="post" enctype="multipart/form-data" class="mb-5 p-4 border rounded bg-light shadow-sm">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload image</label>
+        <input type="file" class="form-control" id="image" name="image" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
 {% endblock %}

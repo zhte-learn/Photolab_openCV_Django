@@ -7,6 +7,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('photo_lab.urls', namespace='photo_lab')),
-    path('video/', include('video_lab.urls', namespace='video_lab')),
+    path(
+      'landmark_detection/',
+      include('landmark_detection.urls', namespace='landmark_detection')
+    ),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

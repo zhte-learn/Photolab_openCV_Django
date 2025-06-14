@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Landmark Detection</h2>
+
+    {% if photos %}
+      <div class="row">
+        {% for photo in photos %}
+          <div class="col-md-4 mb-4">
+            <div class="card">
+                <img 
+                  src="{{ photo.image.url }}" 
+                  class="card-img-top fixed-image" 
+                  alt="{{ photo.title }}"
+                >
+
+              <div class="card-body text-center">
+                <form action="{% url 'landmark_detection:run_detection' photo.id %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-outline-primary">
+                    Landmark Detect
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No images found.</p>
+    {% endif %}
+  </div>
+
+  <style>
+    .fixed-image {
+      height: 300px;
+      object-fit: cover;
+      width: 100%;
+    }
+  </style>
+{% endblock %}

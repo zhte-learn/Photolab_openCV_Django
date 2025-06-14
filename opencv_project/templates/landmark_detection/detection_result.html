@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Detection Result</h2>
+
+    {% if processed_image_url %}
+      <div class="text-start">
+        <img 
+          src="{{ processed_image_url }}"
+          class="img-fluid"
+          alt="Detected Image"
+          style="max-width: 900px; max-height: 500px;"
+        >
+      </div>
+    {% else %}
+      <p>No image detected or failed to load image.</p>
+    {% endif %}
+
+    <div class="mt-4 text-start">
+      <a href="{% url 'landmark_detection:index' %}" class="btn btn-secondary">Back to Landmark List</a>
+    </div>
+  </div>
+{% endblock %}
