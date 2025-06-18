@@ -10,7 +10,7 @@ def index(request):
     return render(request, "landmark_detection/index.html", {"photos": landmark_photos})
 
 
-def run_detection(request, photo_id):
+def detect_landmark(request, photo_id):
     if request.method == "POST":
         photo = get_object_or_404(Photo, id=photo_id)
         image_path = os.path.join(settings.MEDIA_ROOT, photo.image.name)

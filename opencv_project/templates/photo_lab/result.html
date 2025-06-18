@@ -4,46 +4,123 @@
 
 {% block content %}
 <div class="container">
+
+  {% if face_results %}
+    <h2 class="mb-4">Face Detection Results</h2>
+    <div class="row text-center mb-4">
+      <div class="col-md-4">
+        <h5>Haar Cascade</h5>
+        <p>Time: {{ face_results.haar.time }}s</p>
+        <a href="{{ face_results.haar.url }}" target="_blank">
+          <img src="{{ face_results.haar.url }}" class="img-fluid border" alt="Haar Detection">
+        </a>
+      </div>
+      <div class="col-md-4">
+        <h5>HOG + SVM</h5>
+        <p>Time: {{ face_results.hog.time }}s</p>
+        <a href="{{ face_results.hog.url }}" target="_blank">
+          <img src="{{ face_results.hog.url }}" class="img-fluid border" alt="HOG Detection">
+        </a>
+      </div>
+      <div class="col-md-4">
+        <h5>DNN (Caffe)</h5>
+        <p>Time: {{ face_results.dnn.time }}s</p>
+        <a href="{{ face_results.dnn.url }}" target="_blank">
+          <img src="{{ face_results.dnn.url }}" class="img-fluid border" alt="DNN Detection">
+        </a>
+      </div>
+    </div>
+  {% endif %}
+
   {% if compare %}
     <h2 class="mb-4">Original vs. Processed</h2>
     <div class="row">
       <div class="col-md-6">
-        <h5>Original Image</h5>
+        <h5>Original image</h5>
         <a href="{{ original }}" target="_blank">
-          <img src="{{ original }}" class="img-fluid border" alt="Original Image">
+          <img src="{{ original }}" class="img-fluid border" alt="Original image">
         </a>
       </div>
       <div class="col-md-6">
-        <h5>Processed Image</h5>
+        <h5>Processed image</h5>
         <a href="{{ processed }}" target="_blank">
           <img src="{{ processed }}" class="img-fluid border" alt="Processed Image">
         </a>
       </div>
     </div>
-  {% else %}
-    <h2 class="mb-4">Result of Image Processing</h2>
-    <a href="{{ processed }}" target="_blank">
-      <img 
-        src="{{ processed }}" 
-        class="img-fluid"
-        style="width: 100%; object-fit: cover;"
-        alt="Processed Image"
-      >
-    </a>
+  {% elif similar_photos  %}
+    <h2>Original and Similar Images</h2>
+  <div class="row mb-4">
+    <div class="col-md-3 text-center">
+      <h5>Original</h5>
+      <a href="{{ original }}" target="_blank">
+        <img src="{{ original }}" alt="Original Image" class="img-fluid border" />
+      </a>
+    </div>
 
-    {% if time_of_day %}
-      <div class="alert alert-info mt-3">
-        Daytime detected: <strong>{{ time_of_day }}</strong>
-      </div>
-    {% endif %}
+    {% for item in similar_photos %}
+    <div class="col-md-3 text-center">
+      <h5>Similar #{{ forloop.counter }}</h5>
+      <a href="{{ item.photo.image.url }}" target="_blank">
+        <img src="{{ item.photo.image.url }}" alt="Similar Image {{ forloop.counter }}" class="img-fluid border" />
+      </a>
+      <p>Score: {{ item.score|floatformat:2 }}</p>
+    </div>
+    {% endfor %}
 
-    {% if quality_assessment %}
-      <div class="alert alert-warning mt-3">
-        <h5>Image Quality Assessment</h5>
-      </div>
-    {% endif %}
+    <div class="similarity-metrics mt-4" style="background:#f8f9fa; padding:15px; border-radius:5px; font-family: monospace; white-space: pre-wrap;">
+  <strong>Similarity Metrics Breakdown:</strong>
+
+  {% for item in similar_photos %}
+    Match #{{ forloop.counter }}: {{ item.photo.image.url }}
+    {% for method, mscore in item.details.items %}
+      {{ method|ljust:8 }}: {{ mscore|floatformat:4 }}
+    {% endfor %}
+      --> Overall similarity = (hist + ssim + orb + templ + edges + contours) / 6
+                            = {{ item.score|floatformat:4 }}
+  {% endfor %}
+</div>
+  {% elif not face_results and not compare and not similar_photos %}
+    <div class="text-start" style="max-width: 600px;">
+      <h2 class="mb-4">Result of image processing</h2>
+      <a href="{{ processed }}" target="_blank">
+        <img 
+          src="{{ processed }}" 
+          class="img-fluid mb-3"
+          style="width: 100%; height: auto; object-fit: cover;"
+          alt="Processed Image"
+        >
+      </a>
+
+      {% if time_of_day %}
+        <div class="alert alert-info">
+          Daytime detected: <strong>{{ time_of_day }}</strong>
+        </div>
+      {% endif %}
+
+      {% if quality_assessment %}
+        <h3 class="mt-5">Quality assessment</h3>
+        <ul>
+          {% for key, value in quality_assessment.items %}
+            <li><strong>{{ key }}:</strong> {{ value }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if quality_visuals %}
+        <h3 class="mt-5">Quality assessment plots</h3>
+        <ul>
+          {% for title, img_url in quality_visuals.items %}
+            <li class="mt-3">
+              <strong>{{ title }}</strong><br>
+              <img src="{{ img_url }}" alt="{{ title }}" style="max-width: 100%; height: auto;">
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
   {% endif %}
 
-  <a href="{% url 'photo_lab:index' %}" class="btn btn-secondary mt-4">← Back</a>
+  <a href="{% url 'photo_lab:photo_options' photo.id %}" class="btn btn-secondary mt-4" style="width: 150px; text-align: center;">← Back</a>
 </div>
 {% endblock %}

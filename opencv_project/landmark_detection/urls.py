@@ -6,5 +6,5 @@ app_name = "landmark_detection"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("run_detection/<int:photo_id>/", views.run_detection, name="run_detection"),
+    path("detect_landmark/<int:photo_id>/", views.detect_landmark, name="detect_landmark"),
 ]

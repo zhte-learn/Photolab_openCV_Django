@@ -16,7 +16,7 @@
                 >
 
               <div class="card-body text-center">
-                <form action="{% url 'landmark_detection:run_detection' photo.id %}" method="post">
+                <form action="{% url 'landmark_detection:detect_landmark' photo.id %}" method="post">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-sm btn-outline-primary">
                     Landmark Detect
