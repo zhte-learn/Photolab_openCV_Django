@@ -58,7 +58,12 @@
       </form>
     </div>
 
-    <img src="{{ photo.image.url }}" class="card-img-top img-fluid" alt="{{ photo.title }}" style="width: 100%; height: auto; margin-top: 15px;">
+    <img 
+      src="{{ photo.image.url }}" 
+      class="card-img-top img-fluid" 
+      alt="{{ photo.title }}" 
+      style="width: 100%;  margin-top: 15px; height: 500px; object-fit: contain;"
+    >
   </div>
 
   <a href="{% url 'photo_lab:index' %}" class="btn btn-primary mt-3">&larr; Upload next image</a>

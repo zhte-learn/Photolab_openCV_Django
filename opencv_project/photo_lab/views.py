@@ -3,13 +3,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from .models import Photo
 from .opencv_utils import (
-    is_night,
     reduce_noise,
     reduce_blur,
 )
 from .cv_similarity_retrieval import retrieve_similar_images
 from .cv_assess_quality import assess_quality
-from .cv_detect_faces import detect_haar_faces, detect_hog_faces, detect_dnn_faces
+from .cv_detect_faces import detect_faces
+from .cv_classify_daytime import classify_daytime
 
 
 def index(request):
@@ -30,7 +30,7 @@ def process_photo(request, photo_id):
     photo = get_object_or_404(Photo, id=photo_id)
     operations = request.POST.getlist("operations")
     processed_url = photo.image.url
-    time_of_day = None
+    daytime_results = {}
     quality_assessment = None
     quality_visuals = []
     compare = False
@@ -38,18 +38,30 @@ def process_photo(request, photo_id):
     face_results = {}
 
     if "detect_faces" in operations:
-        haar_path, haar_time = detect_haar_faces(photo.image.path)
-        hog_path, hog_time = detect_hog_faces(photo.image.path)
-        dnn_path, dnn_time = detect_dnn_faces(photo.image.path)
+        detection_result = detect_faces(photo.image.path)
 
         face_results = {
-            "haar": {"url": settings.MEDIA_URL + haar_path, "time": round(haar_time, 3)},
-            "hog": {"url": settings.MEDIA_URL + hog_path, "time": round(hog_time, 3)},
-            "dnn": {"url": settings.MEDIA_URL + dnn_path, "time": round(dnn_time, 3)},
+            "haar": {
+                "url": settings.MEDIA_URL + detection_result["haar"]["path"],
+                "time": round(detection_result["haar"]["time"], 3),
+                "faces": detection_result["haar"]["faces"],
+            },
+            "dlib": {
+                "url": settings.MEDIA_URL + detection_result["dlib"]["path"],
+                "time": round(detection_result["dlib"]["time"], 3),
+                "faces": detection_result["dlib"]["faces"],
+            },
+            "dnn": {
+                "url": settings.MEDIA_URL + detection_result["dnn"]["path"],
+                "time": round(detection_result["dnn"]["time"], 3),
+                "faces": detection_result["dnn"]["faces"],
+            },
         }
 
     if "detect_daytime" in operations:
-        time_of_day = "Night" if is_night(photo.image.path) else "Day"
+        daytime_results = classify_daytime(photo.image.path)
+        labels = [v["label"] for v in daytime_results.values()]
+        time_of_day = "Day" if labels.count("day") > labels.count("night") else "Night"
 
     if "reduce_noise" in operations:
         processed_url = reduce_noise(photo.image.path)
@@ -77,7 +89,7 @@ def process_photo(request, photo_id):
         "original": photo.image.url,
         "processed": processed_url,
         "title": photo.title,
-        "time_of_day": time_of_day,
+        "daytime_results": daytime_results,
         "quality_assessment": quality_assessment,
         "quality_visuals": quality_visuals,
         "photo": photo,

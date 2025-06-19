@@ -4,7 +4,45 @@
   <div class="container mt-4">
     <h2>Landmark Detection</h2>
 
-    {% if photos %}
+    <p class="mb-4 mt-5">
+      <strong>How to use:</strong> Upload an image using the form below and choose a landmark to detect.
+    </p>
+
+    <form 
+      method="post"
+      enctype="multipart/form-data"
+      class="mb-3 p-4 border rounded bg-light shadow-sm"
+      action="{% url 'landmark_detection:detect_landmark' %}"
+      style="width: 100%; max-width: 620px;"
+    >
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload image</label>
+        <input type="file" class="form-control" id="image" name="image" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Choose building to detect:</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" value="detect_hq" id="detect_hq" name="options">
+          <label class="form-check-label" for="detect_hq">
+            Detect AldarHQ
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" value="detect_mun" id="detect_mun" name="options">
+          <label class="form-check-label" for="detect_mun">
+            Detect Al Muneera Building
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 150px;">Detect</button>
+    </form>
+  </div>
+{% endblock %}
+    {% comment %} {% if photos %}
       <div class="row">
         {% for photo in photos %}
           <div class="col-md-4 mb-4">
@@ -29,14 +67,14 @@
       </div>
     {% else %}
       <p>No images found.</p>
-    {% endif %}
-  </div>
+    {% endif %} {% endcomment %}
+  
 
-  <style>
+  {% comment %} <style>
     .fixed-image {
       height: 300px;
       object-fit: cover;
       width: 100%;
     }
-  </style>
-{% endblock %}
+  </style> {% endcomment %}
+

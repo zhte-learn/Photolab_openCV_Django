@@ -4,11 +4,13 @@
   <div class="container mt-4">
     <h2>Detection Result</h2>
 
-    {% if processed_image_url %}
-      <div class="text-start">
+    {% if error %}
+      <div class="alert alert-danger mt-3">{{ error }}</div>
+    {% elif processed_image_url %}
+      <div class="text-start mt-3">
         <img 
           src="{{ processed_image_url }}"
-          class="img-fluid"
+          class="img-fluid border"
           alt="Detected Image"
           style="max-width: 900px; max-height: 500px;"
         >
@@ -18,7 +20,7 @@
     {% endif %}
 
     <div class="mt-4 text-start">
-      <a href="{% url 'landmark_detection:index' %}" class="btn btn-secondary">Back to Landmark List</a>
+      <a href="{% url 'landmark_detection:index' %}" class="btn btn-secondary" style="width: 150px;">← Back</a>
     </div>
   </div>
 {% endblock %}

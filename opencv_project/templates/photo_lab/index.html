@@ -4,11 +4,11 @@
 {% endblock %}
 {% block content %}
   <h1 class="mb-5">Photo Lab</h1>
-    <p class="mb-4">
+    <p class="mb-4" style="width: 100%; max-width: 800px;">
       <strong>How to use:</strong> First, upload an image using the form below. After that, choose the task you want to perform.
     </p>
 
-    <form method="post" enctype="multipart/form-data" class="mb-5 p-4 border rounded bg-light shadow-sm">
+    <form method="post" enctype="multipart/form-data" class="mb-5 p-4 border rounded bg-light shadow-sm" style="width: 100%; max-width: 800px;">
       {% csrf_token %}
       <div class="mb-3">
         <label for="image" class="form-label">Upload image</label>

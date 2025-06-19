@@ -10,27 +10,31 @@
     <div class="row text-center mb-4">
       <div class="col-md-4">
         <h5>Haar Cascade</h5>
-        <p>Time: {{ face_results.haar.time }}s</p>
+        <p>Detected Faces: {{ face_results.haar.faces }}</p>
+        <p>Time: {{ face_results.haar.time|floatformat:2 }}s</p>
         <a href="{{ face_results.haar.url }}" target="_blank">
           <img src="{{ face_results.haar.url }}" class="img-fluid border" alt="Haar Detection">
         </a>
       </div>
       <div class="col-md-4">
-        <h5>HOG + SVM</h5>
-        <p>Time: {{ face_results.hog.time }}s</p>
-        <a href="{{ face_results.hog.url }}" target="_blank">
-          <img src="{{ face_results.hog.url }}" class="img-fluid border" alt="HOG Detection">
+        <h5>HOG + SVM (Dlib)</h5>
+        <p>Detected Faces: {{ face_results.dlib.faces }}</p>
+        <p>Time: {{ face_results.dlib.time|floatformat:2 }}s</p>
+        <a href="{{ face_results.dlib.url }}" target="_blank">
+          <img src="{{ face_results.dlib.url }}" class="img-fluid border" alt="HOG Detection">
         </a>
       </div>
       <div class="col-md-4">
         <h5>DNN (Caffe)</h5>
-        <p>Time: {{ face_results.dnn.time }}s</p>
+        <p>Detected Faces: {{ face_results.dnn.faces }}</p>
+        <p>Time: {{ face_results.dnn.time|floatformat:2 }}s</p>
         <a href="{{ face_results.dnn.url }}" target="_blank">
           <img src="{{ face_results.dnn.url }}" class="img-fluid border" alt="DNN Detection">
         </a>
       </div>
     </div>
   {% endif %}
+
 
   {% if compare %}
     <h2 class="mb-4">Original vs. Processed</h2>
@@ -92,11 +96,25 @@
         >
       </a>
 
-      {% if time_of_day %}
-        <div class="alert alert-info">
-          Daytime detected: <strong>{{ time_of_day }}</strong>
+      {% if daytime_results %}
+        <h2 class="mb-4">Time-of-Day Classification Results</h2>
+        <div class="row text-center">
+          {% for method, data in daytime_results.items %}
+            <div class="col-md-4 mb-3">
+              <h5>{{ method|upper }}</h5>
+              <p><strong>Mean:</strong> {{ data.mean|floatformat:2 }}</p>
+              <p><strong>Threshold:</strong> {{ data.threshold }}</p>
+              <p>
+                <strong>Result:</strong>
+                <span style="color: {% if data.label == 'day' %}green{% else %}darkblue{% endif %}; font-weight: bold;">
+                  {{ data.label|title }}
+                </span>
+              </p>
+            </div>
+          {% endfor %}
         </div>
       {% endif %}
+
 
       {% if quality_assessment %}
         <h3 class="mt-5">Quality assessment</h3>
